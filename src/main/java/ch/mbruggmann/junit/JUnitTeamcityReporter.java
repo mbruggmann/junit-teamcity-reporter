@@ -1,6 +1,5 @@
 package ch.mbruggmann.junit;
 
-import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -9,7 +8,6 @@ import org.junit.runner.notification.RunListener;
 import java.io.PrintStream;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * A JUnit RunListener that produces output conforming to the
@@ -58,16 +56,12 @@ public class JUnitTeamcityReporter extends RunListener {
 
   @Override
   public void testFailure(Failure failure) {
+    if (failure.getTrace() != null && !failure.getTrace().isEmpty())
+      out.print(failure.getTrace());
     out.println(String.format("##teamcity[testFailed name='%s' message='%s' details='%s']",
         getTestName(failure.getDescription()),
-        failure.getMessage(),
+        "failed",
         ""));
-  }
-
-  @Override
-  public void testAssumptionFailure(Failure failure) {
-    checkState(failure.getException() instanceof AssumptionViolatedException);
-    // ignore
   }
 
   @Override

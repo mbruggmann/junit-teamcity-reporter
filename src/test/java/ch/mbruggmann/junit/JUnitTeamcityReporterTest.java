@@ -48,7 +48,7 @@ public class JUnitTeamcityReporterTest {
         "##teamcity[testStarted name='testMethod' captureStandardOutput='true']\n" +
         "##teamcity[testFinished name='testMethod']\n" +
         "##teamcity[testStarted name='testMethodFailing' captureStandardOutput='true']\n" +
-        "##teamcity[testFailed name='testMethodFailing' message='null' details='']\n" +
+        "##teamcity[testFailed name='testMethodFailing' message='failed' details='']\n" +
         "##teamcity[testFinished name='testMethodFailing']\n" +
         "##teamcity[testIgnored name='testIgnored' message='']\n" +
         "##teamcity[testSuiteFinished name='ch.mbruggmann.junit.JUnitTeamcityReporterTest$SomeTest']\n";
@@ -58,9 +58,9 @@ public class JUnitTeamcityReporterTest {
     final List<String> actualLines = Arrays.asList(actual.split("\n"));
 
     // contains all expected lines
-    assertEquals(expectedLines.size(), actualLines.size());
+    assertTrue(actualLines.size() >= expectedLines.size());
     for (String line: expectedLines) {
-      assertTrue(actualLines.contains(line));
+      assertTrue(line, actualLines.contains(line));
     }
 
     // suite name (first and last line)
